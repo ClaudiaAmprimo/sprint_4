@@ -30,7 +30,7 @@ function getJoke() {
             }
         }
         catch (err) {
-            console.log(err);
+            console.log('No se ha encontrado ningun chiste', err);
         }
     });
 }
