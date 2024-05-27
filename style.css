@@ -34,3 +34,7 @@ body{
   position: absolute;
   top: 24px;
 }
+
+.emoji{
+  font-size: 2rem;
+}

@@ -12,9 +12,17 @@ console.log('script running');
 const button = document.getElementById("getJokebtn");
 const jokeText = document.getElementById("joke");
 const API = 'https://icanhazdadjoke.com/';
+let currentJoke = null;
 document.addEventListener('DOMContentLoaded', getJoke);
 if (button) {
-    button.addEventListener('click', getJoke);
+    button.addEventListener('click', () => {
+        if (currentJoke && currentJoke.score !== 0) {
+            reportJokes.push(currentJoke);
+            console.log(reportJokes);
+            currentJoke = null;
+        }
+        getJoke();
+    });
 }
 function getJoke() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -27,6 +35,7 @@ function getJoke() {
             const jokeObject = yield jokeResponse.json();
             if (jokeText) {
                 jokeText.innerText = jokeObject.joke;
+                currentJoke = { joke: jokeObject.joke, score: 0, date: "" };
             }
         }
         catch (err) {
@@ -34,4 +43,23 @@ function getJoke() {
         }
     });
 }
-getJoke();
+const reportJokes = [];
+const emoji1 = document.getElementById("score1");
+const emoji2 = document.getElementById("score2");
+const emoji3 = document.getElementById("score3");
+function assignScore(score) {
+    const date = new Date().toISOString();
+    if (currentJoke) {
+        currentJoke.score = score;
+        currentJoke.date = date;
+    }
+}
+if (emoji1) {
+    emoji1.addEventListener("click", () => assignScore(1));
+}
+if (emoji2) {
+    emoji2.addEventListener("click", () => assignScore(2));
+}
+if (emoji3) {
+    emoji3.addEventListener("click", () => assignScore(3));
+}
