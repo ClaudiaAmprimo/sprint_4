@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/ClaudiaAmprimo/sprint_4#readme",
   "devDependencies": {
+    "@types/node": "^20.12.12",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
   }
 }

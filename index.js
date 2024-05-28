@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,17 +7,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import dotenv from 'dotenv';
+dotenv.config();
 const button = document.getElementById("getJokebtn");
 const jokeText = document.getElementById("joke");
 const time = document.getElementById("tiempo");
-const container = document.getElementById('weather-container');
 const APIDadJokes = 'https://icanhazdadjoke.com/';
-const API_KEY_GEO = '694ab2bb6e60320e1c3b3933387a66fe';
-const API_KEY_WEATHER = '70bd3f29288ad5c6f91e38d5ec52a116';
+const api_key_coordinates = process.env.API_KEY_GEO;
+const api_key_weather = process.env.API_KEY_WEATHER;
 const country_code = 'ES';
 const city_name = 'barcelona';
-let lon = 0;
-let lat = 0;
 let currentJoke = null;
 document.addEventListener('DOMContentLoaded', getJoke);
 if (button) {
@@ -72,29 +70,17 @@ if (emoji3) {
 }
 function getCoordinates() {
     return __awaiter(this, void 0, void 0, function* () {
-        const coordinatesResponse = yield fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city_name},${country_code}&limit=1&appid=${API_KEY_GEO}`);
+        const coordinatesResponse = yield fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city_name},${country_code}&limit=1&appid=${api_key_coordinates}`);
         const coordinatesObject = yield coordinatesResponse.json();
-        lon = coordinatesObject[0].lon;
-        lat = coordinatesObject[0].lat;
+        console.log(coordinatesObject);
     });
 }
 function getWeather() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield getCoordinates();
-        const weatherResponse = yield fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY_WEATHER}&units=metric`);
-        const weatherObject = yield weatherResponse.json();
-        let temperatura = weatherObject.main.temp;
-        let icon = weatherObject.weather[0].icon;
-        const iconElement = document.createElement('img');
-        iconElement.src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
-        iconElement.alt = 'icono de tiempo';
-        iconElement.classList.add('weather-icon');
-        const temperatureElement = document.createElement('span');
-        temperatureElement.innerText = `${temperatura} °C`;
-        container.innerHTML = '';
-        container.appendChild(iconElement);
-        container.appendChild(document.createTextNode(' | '));
-        container.appendChild(temperatureElement);
+        const weatherResponse = yield fetch(`https://api.openweathermap.org/data/2.5/weather?lat=41.3851&lon=2.1734&appid=${api_key_weather}`);
+        const weatherObjet = yield weatherResponse.json();
+        console.log(weatherObjet);
     });
 }
+getCoordinates();
 getWeather();
