@@ -13,6 +13,7 @@ const jokeText = document.getElementById("joke");
 const time = document.getElementById("tiempo");
 const container = document.getElementById('weather-container');
 const APIDadJokes = 'https://icanhazdadjoke.com/';
+const APIChuckNorris = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/random';
 const API_KEY_GEO = '694ab2bb6e60320e1c3b3933387a66fe';
 const API_KEY_WEATHER = '70bd3f29288ad5c6f91e38d5ec52a116';
 const country_code = 'ES';
@@ -20,7 +21,7 @@ const city_name = 'barcelona';
 let lon = 0;
 let lat = 0;
 let currentJoke = null;
-document.addEventListener('DOMContentLoaded', getJoke);
+document.addEventListener('DOMContentLoaded', getRandomJoke);
 if (button) {
     button.addEventListener('click', () => {
         if (currentJoke && currentJoke.score !== 0) {
@@ -28,7 +29,7 @@ if (button) {
             console.log(reportJokes);
             currentJoke = null;
         }
-        getJoke();
+        getRandomJoke();
     });
 }
 function getJoke() {
@@ -46,7 +47,30 @@ function getJoke() {
             }
         }
         catch (err) {
-            console.log('No se ha encontrado ningun chiste', err);
+            console.error('No se ha encontrado ningun chiste', err);
+        }
+    });
+}
+function getJokeChuck() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                'X-RapidAPI-Key': '41a9ad82edmshf08c79787bb5b30p12259cjsne13329d1b597',
+                'X-RapidAPI-Host': 'matchilling-chuck-norris-jokes-v1.p.rapidapi.com'
+            }
+        };
+        try {
+            const response = yield fetch(APIChuckNorris, options);
+            const result = yield response.json();
+            if (jokeText) {
+                jokeText.innerText = result.value;
+                currentJoke = { joke: result.value, score: 0, date: "" };
+            }
+        }
+        catch (error) {
+            console.error('No se ha encontrado ningun chiste', error);
         }
     });
 }
@@ -59,6 +83,15 @@ function assignScore(score) {
     if (currentJoke) {
         currentJoke.score = score;
         currentJoke.date = date;
+    }
+}
+function getRandomJoke() {
+    const random = Math.random();
+    if (random < 0.5) {
+        getJoke();
+    }
+    else {
+        getJokeChuck();
     }
 }
 if (emoji1) {
@@ -83,15 +116,15 @@ function getWeather() {
         yield getCoordinates();
         const weatherResponse = yield fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY_WEATHER}&units=metric`);
         const weatherObject = yield weatherResponse.json();
-        let temperatura = weatherObject.main.temp;
+        let temperatura = parseInt(weatherObject.main.temp.toString());
         let icon = weatherObject.weather[0].icon;
+        container.innerHTML = '';
         const iconElement = document.createElement('img');
         iconElement.src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
         iconElement.alt = 'icono de tiempo';
         iconElement.classList.add('weather-icon');
         const temperatureElement = document.createElement('span');
         temperatureElement.innerText = `${temperatura} °C`;
-        container.innerHTML = '';
         container.appendChild(iconElement);
         container.appendChild(document.createTextNode(' | '));
         container.appendChild(temperatureElement);
