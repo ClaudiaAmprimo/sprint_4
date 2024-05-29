@@ -2,6 +2,7 @@ const button = document.getElementById("getJokebtn") as HTMLButtonElement;
 const jokeText = document.getElementById("joke") as HTMLParagraphElement;
 const time = document.getElementById("tiempo") as HTMLDivElement;
 const container = document.getElementById('weather-container') as HTMLDivElement;
+const blob = document.getElementById("blob") as HTMLImageElement;
 
 const APIDadJokes = 'https://icanhazdadjoke.com/';
 const APIChuckNorris = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/random';
@@ -30,6 +31,8 @@ if (button) {
       currentJoke = null;
     }
     getRandomJoke();
+    let num = Math.floor(Math.random() * 7) + 1;
+    blob.src = `./images/blob_${num}.svg`
   })
 }
 

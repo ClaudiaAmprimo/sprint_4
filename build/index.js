@@ -12,6 +12,7 @@ const button = document.getElementById("getJokebtn");
 const jokeText = document.getElementById("joke");
 const time = document.getElementById("tiempo");
 const container = document.getElementById('weather-container');
+const blob = document.getElementById("blob");
 const APIDadJokes = 'https://icanhazdadjoke.com/';
 const APIChuckNorris = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/random';
 const API_KEY_GEO = '694ab2bb6e60320e1c3b3933387a66fe';
@@ -30,6 +31,8 @@ if (button) {
             currentJoke = null;
         }
         getRandomJoke();
+        let num = Math.floor(Math.random() * 7) + 1;
+        blob.src = `./images/blob_${num}.svg`;
     });
 }
 function getJoke() {
