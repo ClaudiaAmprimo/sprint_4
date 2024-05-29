@@ -31,8 +31,9 @@ if (button) {
             currentJoke = null;
         }
         getRandomJoke();
-        let num = Math.floor(Math.random() * 7) + 1;
+        let num = Math.floor(Math.random() * 5) + 1;
         blob.src = `./images/blob_${num}.svg`;
+        console.log(num);
     });
 }
 function getJoke() {
